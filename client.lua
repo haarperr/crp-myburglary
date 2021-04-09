@@ -1,22 +1,22 @@
-RLCore = nil
+QBCore = nil
 isLoggedIn = false
 local myJob = {}
 
 Citizen.CreateThread(function()
-	while RLCore == nil do
-		TriggerEvent('RLCore:GetObject', function(obj) RLCore = obj end)
+	while QBCore == nil do
+		TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
 		Citizen.Wait(0)
 	end
 end)
 
-RegisterNetEvent('RLCore:Client:OnPlayerLoaded')
-AddEventHandler('RLCore:Client:OnPlayerLoaded', function()
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
+AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
 	isLoggedIn = true
-	myJob = RLCore.Functions.GetPlayerData().job
+	myJob = QBCore.Functions.GetPlayerData().job
 end)
 
-RegisterNetEvent('RLCore:Client:OnJobUpdate')
-AddEventHandler('RLCore:Client:OnJobUpdate', function(JobInfo)
+RegisterNetEvent('QBCore:Client:OnJobUpdate')
+AddEventHandler('QBCore:Client:OnJobUpdate', function(JobInfo)
     isLoggedIn = true
     myJob = JobInfo
 end)
@@ -303,11 +303,11 @@ Citizen.CreateThread(function()
                 showInfobar(Translation[Config.Locale]['infobar_enter'])
                 if IsControlJustReleased(0, Config.InteractKey) then
                     if Config.requiresItem then
-                        RLCore.Functions.TriggerCallback('myBurglary:checkItem', function(hasLockpick)
+                        QBCore.Functions.TriggerCallback('myBurglary:checkItem', function(hasLockpick)
                             if hasLockpick then
-                                RLCore.Functions.TriggerCallback('myBurglary:checkLast', function(timeLeft)
+                                QBCore.Functions.TriggerCallback('myBurglary:checkLast', function(timeLeft)
                                     if timeLeft == 0 then
-                                        RLCore.Functions.TriggerCallback('myBurglary:checkCops', function(cops)
+                                        QBCore.Functions.TriggerCallback('myBurglary:checkCops', function(cops)
                                             if cops >= currentMission.requiredCops then
                                                 startRobbery()
                                                 TriggerServerEvent('myBurglary:removeLockpick')
@@ -324,9 +324,9 @@ Citizen.CreateThread(function()
                             end
                         end, Config.LockpickItem)
                     else
-                        RLCore.Functions.TriggerCallback('myBurglary:checkLast', function(timeLeft)
+                        QBCore.Functions.TriggerCallback('myBurglary:checkLast', function(timeLeft)
                             if timeLeft == 0 then
-                                RLCore.Functions.TriggerCallback('myBurglary:checkCops', function(cops)
+                                QBCore.Functions.TriggerCallback('myBurglary:checkCops', function(cops)
                                     if cops >= currentMission.requiredCops then
                                         startRobbery()
                                     else
@@ -504,7 +504,7 @@ end)
 
 RegisterNetEvent('myBurglary:msg')
 AddEventHandler('myBurglary:msg', function(message)
-    RLCore.Functions.Notify(message)
+    QBCore.Functions.Notify(message)
 end)
 
 function endRobbery()
